@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-sidplaceholder
+  namespace: rbac-sidplaceholder
+  labels:
+    owner: "sidplaceholder"
+spec:
+  type: ClusterIP
+  selector:
+    app: web-sidplaceholder
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
