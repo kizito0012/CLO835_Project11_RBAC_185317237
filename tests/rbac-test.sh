@@ -26,7 +26,7 @@ PASS_COUNT=0
 FAIL_COUNT=0
 CHECK_COUNT=0
 
-while IFS='|' read -r persona verb resource namespace_value expected ||
+while IFS='|' read -r persona verb resource namespace_value expected subresource ||
       [[ -n "${persona:-}" ]]; do
 
     # Ignore comments and blank lines.
@@ -48,15 +48,25 @@ while IFS='|' read -r persona verb resource namespace_value expected ||
         continue
     fi
 
-    actual="$(
-        kubectl \
-          --kubeconfig "$kubeconfig" \
-          auth can-i "$verb" "$resource" \
-          -n "$target_namespace" \
-          2>/dev/null |
-        tr -d '\r\n'
-    )"
+    can_i_args=(
+    auth can-i
+    "$verb"
+    "$resource"
+    -n "$target_namespace"
+)
 
+if [[ -n "${subresource:-}" ]]; then
+    can_i_args+=(--subresource="$subresource")
+fi
+
+actual="$(
+    kubectl \
+      --kubeconfig "$kubeconfig" \
+      "${can_i_args[@]}" \
+      2>/dev/null |
+    tr -d '\r\n'
+)"
+subresource_display="${subresource:-none}"
     if [[ "$actual" == "$expected" ]]; then
         echo "PASS: persona=${persona} verb=${verb} resource=${resource} namespace=${target_namespace} expected=${expected} actual=${actual}"
         PASS_COUNT=$((PASS_COUNT + 1))

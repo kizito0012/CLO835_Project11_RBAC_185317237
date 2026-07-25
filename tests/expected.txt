@@ -6,10 +6,13 @@ deployer|watch|services|project|yes
 deployer|create|configmaps|project|yes
 deployer|update|deployments.apps|project|yes
 deployer|patch|deployments.apps|project|yes
+deployer|patch|deployments.apps|project|yes|scale
 deployer|delete|services|project|yes
 deployer|get|secrets|project|no
 deployer|create|roles.rbac.authorization.k8s.io|project|no
 deployer|list|pods|default|no
+deployer|patch|deployments.apps|project|yes|scale
+deployer|patch|deployments.apps|project|yes|scale
 
 readonly|get|pods|project|yes
 readonly|list|pods|project|yes
