@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-sidplaceholder
+  namespace: rbac-sidplaceholder
+  labels:
+    app: web-sidplaceholder
+    owner: "sidplaceholder"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web-sidplaceholder
+  template:
+    metadata:
+      labels:
+        app: web-sidplaceholder
+        owner: "sidplaceholder"
+    spec:
+      containers:
+        - name: web
+          image: nginx:1.27-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: app-config-sidplaceholder
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
