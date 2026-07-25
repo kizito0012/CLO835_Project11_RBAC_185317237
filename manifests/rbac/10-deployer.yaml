@@ -1,0 +1,52 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: deployer-role-sidplaceholder
+  namespace: rbac-sidplaceholder
+  labels:
+    owner: "sidplaceholder"
+rules:
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+      - replicasets
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - services
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: deployer-binding-sidplaceholder
+  namespace: rbac-sidplaceholder
+  labels:
+    owner: "sidplaceholder"
+subjects:
+  - kind: ServiceAccount
+    name: deployer-sidplaceholder
+    namespace: rbac-sidplaceholder
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: deployer-role-sidplaceholder

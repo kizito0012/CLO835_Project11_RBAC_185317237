@@ -1,0 +1,21 @@
+# Generated ServiceAccount and administrator kubeconfigs
+kubeconfigs/*.kubeconfig
+!kubeconfigs/.gitkeep
+
+# Rendered Kubernetes manifests
+.rendered/
+
+# Generated project settings
+.project.env
+
+# Temporary files
+*.tmp
+*.log
+
+# Editor files
+.vscode/
+.idea/
+
+# Windows files
+Thumbs.db
+Desktop.ini
