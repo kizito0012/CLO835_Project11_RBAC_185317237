@@ -1,0 +1,172 @@
+
+============================================================
+Deleting an older Project 11 cluster if it exists
+============================================================
+
+============================================================
+Creating kind cluster clo835-rbac-185317237
+============================================================
+Creating cluster "clo835-rbac-185317237" ...
+ • Ensuring node image (kindest/node:v1.36.1) 🖼  ...
+ ✓ Ensuring node image (kindest/node:v1.36.1) 🖼
+ • Preparing nodes 📦 📦   ...
+ ✓ Preparing nodes 📦 📦 
+ • Writing configuration 📜  ...
+ ✓ Writing configuration 📜
+ • Starting control-plane 🕹️  ...
+ ✓ Starting control-plane 🕹️
+ • Installing CNI 🔌  ...
+ ✓ Installing CNI 🔌
+ • Installing StorageClass 💾  ...
+ ✓ Installing StorageClass 💾
+ • Joining worker nodes 🚜  ...
+ ✓ Joining worker nodes 🚜
+Set kubectl context to "kind-clo835-rbac-185317237"
+You can now use your cluster with:
+
+kubectl cluster-info --context kind-clo835-rbac-185317237
+
+Have a nice day! 👋
+
+============================================================
+Waiting for both kind nodes to become Ready
+============================================================
+node/clo835-rbac-185317237-control-plane condition met
+node/clo835-rbac-185317237-worker condition met
+
+============================================================
+Creating namespace rbac-185317237
+============================================================
+namespace/rbac-185317237 created
+namespace/rbac-185317237 labeled
+
+============================================================
+Rendering manifests with student ID 185317237
+============================================================
+
+============================================================
+Applying ServiceAccounts, Roles and RoleBindings
+============================================================
+serviceaccount/deployer-185317237 created
+serviceaccount/readonly-185317237 created
+serviceaccount/ci-185317237 created
+role.rbac.authorization.k8s.io/deployer-role-185317237 created
+rolebinding.rbac.authorization.k8s.io/deployer-binding-185317237 created
+role.rbac.authorization.k8s.io/readonly-role-185317237 created
+rolebinding.rbac.authorization.k8s.io/readonly-binding-185317237 created
+role.rbac.authorization.k8s.io/ci-role-185317237 created
+rolebinding.rbac.authorization.k8s.io/ci-binding-185317237 created
+
+============================================================
+Applying demo workload
+============================================================
+configmap/app-config-185317237 created
+secret/db-creds-185317237 created
+deployment.apps/web-185317237 created
+service/web-185317237 created
+
+============================================================
+Waiting for web-185317237 rollout
+============================================================
+Waiting for deployment "web-185317237" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "web-185317237" rollout to finish: 1 of 2 updated replicas are available...
+deployment "web-185317237" successfully rolled out
+
+============================================================
+Generating kubeconfig for deployer
+============================================================
+
+============================================================
+Generating kubeconfig for readonly
+============================================================
+
+============================================================
+Generating kubeconfig for ci
+============================================================
+
+============================================================
+Running RBAC permission tests
+============================================================
+PASS: persona=deployer verb=get resource=deployments.apps namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=deployer verb=list resource=pods namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=deployer verb=watch resource=services namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=deployer verb=create resource=configmaps namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=deployer verb=update resource=deployments.apps namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=deployer verb=patch resource=deployments.apps namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=deployer verb=patch resource=deployments.apps namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=deployer verb=delete resource=services namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=deployer verb=get resource=secrets namespace=rbac-185317237 expected=no actual=no
+PASS: persona=deployer verb=create resource=roles.rbac.authorization.k8s.io namespace=rbac-185317237 expected=no actual=no
+PASS: persona=deployer verb=list resource=pods namespace=default expected=no actual=no
+PASS: persona=deployer verb=patch resource=deployments.apps namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=deployer verb=patch resource=deployments.apps namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=readonly verb=get resource=pods namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=readonly verb=list resource=pods namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=readonly verb=watch resource=pods namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=readonly verb=get resource=deployments.apps namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=readonly verb=list resource=services namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=readonly verb=get resource=configmaps namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=readonly verb=list resource=events namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=readonly verb=get resource=secrets namespace=rbac-185317237 expected=no actual=no
+PASS: persona=readonly verb=create resource=configmaps namespace=rbac-185317237 expected=no actual=no
+PASS: persona=readonly verb=delete resource=pods namespace=rbac-185317237 expected=no actual=no
+PASS: persona=readonly verb=list resource=pods namespace=default expected=no actual=no
+PASS: persona=ci verb=get resource=deployments.apps namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=ci verb=patch resource=deployments.apps namespace=rbac-185317237 expected=yes actual=yes
+PASS: persona=ci verb=list resource=deployments.apps namespace=rbac-185317237 expected=no actual=no
+PASS: persona=ci verb=watch resource=deployments.apps namespace=rbac-185317237 expected=no actual=no
+PASS: persona=ci verb=get resource=pods namespace=rbac-185317237 expected=no actual=no
+PASS: persona=ci verb=list resource=pods namespace=rbac-185317237 expected=no actual=no
+PASS: persona=ci verb=get resource=pods/log namespace=rbac-185317237 expected=no actual=no
+PASS: persona=ci verb=delete resource=deployments.apps namespace=rbac-185317237 expected=no actual=no
+PASS: persona=ci verb=create resource=deployments.apps namespace=rbac-185317237 expected=no actual=no
+PASS: persona=ci verb=get resource=secrets namespace=rbac-185317237 expected=no actual=no
+PASS: persona=ci verb=patch resource=deployments.apps namespace=default expected=no actual=no
+
+Total checks: 35
+Passed:       35
+Failed:       0
+
+============================================================
+Final cluster state
+============================================================
+NAME                                  STATUS   ROLES           AGE   VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                       KERNEL-VERSION                             CONTAINER-RUNTIME
+clo835-rbac-185317237-control-plane   Ready    control-plane   45s   v1.36.1   172.18.0.4    <none>        Debian GNU/Linux 13 (trixie)   6.6.87.2-microsoft-standard-WSL2 (amd64)   containerd://2.3.1
+clo835-rbac-185317237-worker          Ready    <none>          33s   v1.36.1   172.18.0.3    <none>        Debian GNU/Linux 13 (trixie)   6.6.87.2-microsoft-standard-WSL2 (amd64)   containerd://2.3.1
+
+NAME                                 READY   STATUS    RESTARTS   AGE
+pod/web-185317237-6f959db99d-qpf7b   1/1     Running   0          18s
+pod/web-185317237-6f959db99d-xqbw8   1/1     Running   0          18s
+
+NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/web-185317237   ClusterIP   10.96.182.167   <none>        80/TCP    18s
+
+NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/web-185317237   2/2     2            2           18s
+
+NAME                                       DESIRED   CURRENT   READY   AGE
+replicaset.apps/web-185317237-6f959db99d   2         2         2       18s
+
+NAME                                AGE
+serviceaccount/ci-185317237         19s
+serviceaccount/default              20s
+serviceaccount/deployer-185317237   19s
+serviceaccount/readonly-185317237   19s
+
+NAME                                                     CREATED AT
+role.rbac.authorization.k8s.io/ci-role-185317237         2026-07-26T15:19:41Z
+role.rbac.authorization.k8s.io/deployer-role-185317237   2026-07-26T15:19:41Z
+role.rbac.authorization.k8s.io/readonly-role-185317237   2026-07-26T15:19:41Z
+
+NAME                                                               ROLE                           AGE
+rolebinding.rbac.authorization.k8s.io/ci-binding-185317237         Role/ci-role-185317237         19s
+rolebinding.rbac.authorization.k8s.io/deployer-binding-185317237   Role/deployer-role-185317237   19s
+rolebinding.rbac.authorization.k8s.io/readonly-binding-185317237   Role/readonly-role-185317237   19s
+
+============================================================
+Bootstrap completed successfully
+============================================================
+
+real	1m3.748s
+user	0m1.402s
+sys	0m1.869s
