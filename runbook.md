@@ -52,11 +52,6 @@ Check the current Kubernetes context:
 kubectl config current-context
 ```
 
-The expected project context is:
-
-```text
-kind-clo835-rbac-185317237
-```
 
 Switch to it when necessary:
 
@@ -83,14 +78,6 @@ The script should:
 5. Generate kubeconfigs for deployer, readonly, and CI.
 6. Run the RBAC permission test suite.
 
-Healthy output should end with:
-
-```text
-Total checks: 35
-Passed: 35
-Failed: 0
-Bootstrap completed successfully
-```
 
 Check cluster health:
 
@@ -98,12 +85,6 @@ Check cluster health:
 kubectl get nodes
 ```
 
-Expected:
-
-```text
-clo835-rbac-185317237-control-plane   Ready
-clo835-rbac-185317237-worker          Ready
-```
 
 Check project resources:
 
@@ -111,24 +92,6 @@ Check project resources:
 kubectl get all,sa,role,rolebinding -n rbac-185317237
 ```
 
-Expected resources include:
-
-```text
-deployment/web-185317237
-service/web-185317237
-
-serviceaccount/deployer-185317237
-serviceaccount/readonly-185317237
-serviceaccount/ci-185317237
-
-role/deployer-role-185317237
-role/readonly-role-185317237
-role/ci-role-185317237
-
-rolebinding/deployer-binding-185317237
-rolebinding/readonly-binding-185317237
-rolebinding/ci-binding-185317237
-```
 
 ---
 
@@ -140,12 +103,6 @@ kubectl get configmap app-config-185317237 \
   -o yaml
 ```
 
-Expected:
-
-```yaml
-data:
-  owner: "185317237"
-```
 
 ---
 
@@ -155,41 +112,6 @@ data:
 ./tests/rbac-test.sh
 ```
 
-Healthy summary:
-
-```text
-Total checks: 35
-Passed: 35
-Failed: 0
-```
-
-Check the exit code:
-
-```bash
-echo $?
-```
-
-Expected:
-
-```text
-0
-```
-
-A PASS line means the actual permission matched the expected result.
-
-Example allowed check:
-
-```text
-PASS: persona=readonly verb=list resource=pods expected=yes actual=yes
-```
-
-Example denied check:
-
-```text
-PASS: persona=readonly verb=get resource=secrets expected=no actual=no
-```
-
-A FAIL line means the actual result did not match the expected result.
 
 ---
 
@@ -216,12 +138,6 @@ kubectl \
   -n rbac-185317237
 ```
 
-Expected:
-
-```text
-READY   UP-TO-DATE   AVAILABLE
-3/3     3            3
-```
 
 Check rollout status:
 
@@ -241,11 +157,6 @@ kubectl \
   -n rbac-185317237
 ```
 
-Expected:
-
-```text
-Error from server (Forbidden)
-```
 
 ### Show RBAC denial
 
@@ -256,11 +167,6 @@ kubectl \
   -n rbac-185317237
 ```
 
-Expected:
-
-```text
-no
-```
 
 ### Return to two replicas
 
@@ -323,11 +229,6 @@ kubectl \
   -n rbac-185317237
 ```
 
-Expected:
-
-```text
-Error from server (Forbidden)
-```
 
 ### Show modification denial
 
@@ -338,11 +239,6 @@ kubectl \
   -n rbac-185317237
 ```
 
-Expected:
-
-```text
-no
-```
 
 ---
 
@@ -360,11 +256,6 @@ kubectl \
   -n rbac-185317237
 ```
 
-Expected:
-
-```text
-deployment.apps/web-185317237 image updated
-```
 
 ### Verify the image
 
@@ -376,11 +267,6 @@ kubectl \
   -o jsonpath='{.spec.template.spec.containers[0].image}{"\n"}'
 ```
 
-Expected:
-
-```text
-christian9299/clo835-app:v1
-```
 
 ### Show pod-list denial
 
@@ -391,11 +277,6 @@ kubectl \
   -n rbac-185317237
 ```
 
-Expected:
-
-```text
-Error from server (Forbidden)
-```
 
 ### Show logs denial
 
@@ -406,11 +287,6 @@ kubectl \
   -n rbac-185317237
 ```
 
-Expected:
-
-```text
-Error from server (Forbidden)
-```
 
 ### Show delete denial
 
@@ -421,11 +297,6 @@ kubectl \
   -n rbac-185317237
 ```
 
-Expected:
-
-```text
-no
-```
 
 ---
 
@@ -529,8 +400,6 @@ kubectl get rolebinding readonly-binding-185317237 \
   -n rbac-185317237
 ```
 
-A `NotFound` error means it was deleted.
-
 ### Inspect the binding YAML
 
 ```bash
@@ -608,13 +477,6 @@ Prove recovery:
 ./tests/rbac-test.sh
 ```
 
-Expected:
-
-```text
-Total checks: 35
-Passed: 35
-Failed: 0
-```
 
 ---
 
@@ -642,11 +504,6 @@ kubectl \
   -n rbac-185317237
 ```
 
-Expected:
-
-```text
-no
-```
 
 State:
 
@@ -668,11 +525,6 @@ kubectl get rolebinding readonly-binding-185317237 \
   -n rbac-185317237
 ```
 
-Expected:
-
-```text
-Error from server (NotFound)
-```
 
 Repair:
 
@@ -692,12 +544,6 @@ Verify:
 ./tests/rbac-test.sh
 ```
 
-Expected:
-
-```text
-Passed: 35
-Failed: 0
-```
 
 ---
 
@@ -717,12 +563,6 @@ Then:
 ./tests/rbac-test.sh
 ```
 
-Expected:
-
-```text
-Passed: 35
-Failed: 0
-```
 
 Confirm generated kubeconfigs are not tracked:
 
@@ -730,11 +570,6 @@ Confirm generated kubeconfigs are not tracked:
 git ls-files kubeconfigs/
 ```
 
-Expected:
-
-```text
-kubeconfigs/.gitkeep
-```
 
 ---
 
@@ -750,15 +585,6 @@ kubectl get deployment web-185317237 -n rbac-185317237
 ./tests/rbac-test.sh
 ```
 
-Expected:
-
-```text
-nothing to commit, working tree clean
-Both nodes Ready
-Deployment 2/2 Ready
-Passed: 35
-Failed: 0
-```
 
 ---
 
